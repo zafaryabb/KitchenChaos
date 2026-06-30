@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a7d6ec7527f146b6ab6b41621979196, type: 3}
+  m_Name: SeaBass_FilletCooked
+  m_EditorClassIdentifier: Assembly-CSharp::KitchenObjectSO
+  prefab: {fileID: 3516209477550079223, guid: a8e8dc5da1b5b064b9e3f5f26e5340fd, type: 3}
+  icon: {fileID: 21300000, guid: 547acbf9523228d45905d4ee2902dfe2, type: 3}
+  objectName: Grilled Sea Bass
+  petFood: 0

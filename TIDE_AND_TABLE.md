@@ -96,59 +96,52 @@ It creates everything under `Assets/_FishGame/` (the burger content is left
 untouched) and is **idempotent** — edit the data tables at the bottom of
 `FishContentGenerator.cs` and re-run any time.
 
-Produces:
-- `KitchenObjectSO/` — one SO per item
-- `Prefabs/` — one item prefab per SO (wraps the seafood mesh + `KitchenObject`)
-- `CuttingRecipeSO/` — the cutting chains
+Produces (under `Assets/_FishGame/`):
+- `Materials/Seafood_Cooked.mat` — warm tint that makes a mesh read as "grilled/cooked" (the pack ships one shared material, so cooked = tint)
+- `KitchenObjectSO/` + `Prefabs/` — an SO + item prefab per stage **and** per cooked variant
+- `CuttingRecipeSO/` — prep chains (fillet / peel / shuck / ring / chop)
+- `FryingRecipeSO/` — stove recipes (Fillet → Grilled, Rings → Calamari, …)
 - `MenuRecipeSO/` + `PlatedVisuals/` — dishes and their plated presentation prefabs
 - `_FishMenu.asset` — the `MenuSO` listing every dish
 
-After running, **check the Console** for the summary line and any "missing mesh"
-warnings.
+After running, **check the Console** for the summary line and any "missing mesh" warnings.
 
-### 4.1 Items (21)
+### 4.1 The prep → cook flow (the core idea)
 
-| Item id | Display | Source mesh | Pet food |
+The **fillet / meat stage is the branch point**. After you process a fish to its
+fillet (or shuck a mollusk to its meat), you choose:
+- **Cut further** at the board → a **raw** dish (sashimi), or
+- **Take it to the stove** → a **cooked** dish (grilled / seared / fried / steamed).
+
+So prep *and* cooking are both core. Cooking is **calm**: gentle fry times, no burn
+alarms, and overcooking does nothing harmful. *(Future stations like
+dressing/seasoning slot in the same way — a counter that swaps item A → B via a
+recipe SO.)*
+
+### 4.2 Species in the menu (full pack)
+
+The exact tables live at the bottom of `FishContentGenerator.cs` (edit + re-run to
+extend). Current coverage:
+
+| Group | Species | Prep | Cook |
 |---|---|---|---|
-| Salmon_Whole / _Half / _Fillet / _Sashimi | Salmon line | `Salmon_1[_Half_1/_Fillet_1/_Slice]` | – |
-| Tuna_Whole / _Half / _Fillet / _Sashimi | Tuna line | `Tuna_1[…]` | – |
-| SeaBass_Whole / _Half / _Fillet / _Sashimi | Sea Bass line | `SeaBass_1[…]` | – |
-| Squid_Whole / _Tube / _Rings | Squid line | `Squid_1` / `_Fillet_1` / `_Ring_1` | – |
-| Shrimp_Whole / _Peeled | Shrimp line | `Shrimp_1` / `_Peeled_1` | – |
-| Crab_Whole / _Meat | Crab line | `Crab_1` / `_Claw_1` | – |
-| Crab_Shell | scrap | `Crab_1_Shell` | ✅ |
-| Fish_Skeleton | scrap | `Skeleton_Fish_1` | ✅ |
+| Fish | Salmon, Tuna, Sea Bass | Whole→Half→Fillet→Sashimi | Fillet → grilled/seared |
+| Fish | Sardine, Anchovy | Whole→Half→Fillet | Sardine fillet → grilled |
+| Shellfish | Shrimp | Whole→Peeled | → grilled |
+| Shellfish | Lobster ×2 (tail + claws) | Whole→Split→Tail/Claw | → cooked |
+| Shellfish | Crab | Whole→Meat (+shell) | → steamed |
+| Mollusks | Mussel, Oyster, Scallop | shuck: Closed→Open→Meat (+shell) | Mussel/Scallop → cooked; Oyster raw |
+| Cephalopods | Squid, Octopus | Squid→Rings, Octopus→Slice | → fried/grilled |
 
-### 4.2 Cutting chains (13)
+Filleting/shucking drops a **scrap** (skeleton / crab/mussel/oyster/scallop shell) →
+all flagged `petFood` for the cat station.
 
-| From → To | Cuts | Verb | Byproduct |
-|---|---|---|---|
-| Salmon_Whole → Salmon_Half | 3 | Cut | – |
-| Salmon_Half → Salmon_Fillet | 3 | Fillet | Fish_Skeleton |
-| Salmon_Fillet → Salmon_Sashimi | 4 | Slice | – |
-| Tuna_Whole → Tuna_Half | 3 | Cut | – |
-| Tuna_Half → Tuna_Fillet | 3 | Fillet | Fish_Skeleton |
-| Tuna_Fillet → Tuna_Sashimi | 4 | Slice | – |
-| SeaBass_Whole → SeaBass_Half | 3 | Cut | – |
-| SeaBass_Half → SeaBass_Fillet | 3 | Fillet | Fish_Skeleton |
-| SeaBass_Fillet → SeaBass_Sashimi | 4 | Slice | – |
-| Squid_Whole → Squid_Tube | 3 | Cut | – |
-| Squid_Tube → Squid_Rings | 4 | Ring | – |
-| Shrimp_Whole → Shrimp_Peeled | 3 | Peel | – |
-| Crab_Whole → Crab_Meat | 4 | Shuck | Crab_Shell |
+### 4.3 Dishes (~21)
 
-### 4.3 Dishes (8)
-
-| Dish | Ingredients |
-|---|---|
-| Salmon Sashimi | Salmon_Sashimi |
-| Tuna Sashimi | Tuna_Sashimi |
-| Sea Bass Sashimi | SeaBass_Sashimi |
-| Calamari Rings | Squid_Rings |
-| Shrimp Plate | Shrimp_Peeled |
-| Crab Plate | Crab_Meat |
-| Sashimi Trio | Salmon_Sashimi + Tuna_Sashimi + SeaBass_Sashimi |
-| Seafood Platter | Salmon_Sashimi + Tuna_Sashimi + Shrimp_Peeled + Squid_Rings |
+Raw bar: Salmon/Tuna/Sea Bass Sashimi, Sashimi Trio, Fresh Oysters, Shrimp Cocktail,
+Crab Plate. Cooked: Grilled Salmon, Seared Tuna, Grilled Sea Bass, Grilled Sardines,
+Fried Calamari, Grilled Shrimp, Steamed Mussels, Seared Scallops, Grilled Octopus,
+Lobster Tail, Lobster Claws, Steamed Crab. Combos: Seafood Platter, Grill Combo.
 
 > Plate matching is **subset-based** (existing `MenuManager`), so adding the
 > ingredients in any order resolves to the right dish and auto-upgrades to bigger
@@ -192,8 +185,12 @@ Do these in the `GameScene`. Checkboxes track progress.
 - [ ] On the `CuttingCounter_Visual`, assign **itemAnchor** (the counter's item spawn point); (Later) optionally hook up **sliceParticles** / **perfectSparkle** particle systems.
 - [ ] (Later) (Optional) Add a `PerfectSliceIndicator` (world-space rig above the board): assign `cuttingCounter`, `root`, `marker`, `sweetZone`.
 
+### Step 2.5 — Stove (cooking)
+- [ ] Use a `StoveCounter` (the burger game already has a `StoveCounter` prefab — reuse it, re-skin with a KayKit `stove`/`pan`). Set its **Frying Recipes** = all assets in `_FishGame/FryingRecipeSO`.
+- [ ] That's it for logic: carry a fillet/meat onto the stove → it cooks (sizzle while frying), then sits ready. No burning in calm mode.
+
 ### Step 3 — Fish source(s)
-- [ ] Add a `ContainerCounter` per whole fish you want available; set **kitchenObject** = `Salmon_Whole` (and `Tuna_Whole`, `SeaBass_Whole`, `Squid_Whole`, `Shrimp_Whole`, `Crab_Whole`). Dress each with a KayKit crate / ice display.
+- [ ] Add a `ContainerCounter` per whole fish you want available; set **kitchenObject** = `Salmon_Whole` (and `Tuna_Whole`, `SeaBass_Whole`, `Sardine_Whole`, `Squid_Whole`, `Octopus_Whole`, `Shrimp_Whole`, `Lobster_Whole`, `Crab_Whole`, `Mussel_Closed`, `Oyster_Closed`, `Scallop_Closed`, …). Dress each with a KayKit crate / ice display.
 
 ### Step 4 — Cat station (Later)
 - [ ] Drop `Quirky Series ▸ … ▸ Prefabs ▸ Cat.prefab` into a cosy corner.
@@ -234,7 +231,7 @@ Do these in the `GameScene`. Checkboxes track progress.
 
 ## 7. 🔜 Roadmap
 
-- **Phase 2 — Variety:** more fish variants (_2/_3 meshes), cooking/grilling (needs cooked-look meshes or tinted variants), oyster/mussel/scallop shucking, lobster.
+- **Phase 2 — Variety:** ✅ mostly done — full pack species, shucking, lobster, and **cooking** are in. Remaining: a dedicated **dressing/seasoning** station (sauces, garnish, lemon), distinct **peel/shuck** counter feel, more _2/_3 visual variants.
 - **Phase 3 — Service & zen tuning:** customers at the `wall_orderwindow`, patient timers + soft tip falloff, satisfaction meter, plating polish.
 - **Phase 4 — Content & dressing:** full menu, restaurant environment build-out (KayKit), day/session structure, soft scoring UI, save.
 
@@ -248,6 +245,12 @@ Do these in the `GameScene`. Checkboxes track progress.
 - Wrote the one-click `FishContentGenerator` and seeded **21 items / 13 cutting chains / 8 dishes** (§4).
 - Confirmed DOTween modules + Cinemachine 2.10.7 resolve correctly; removed a build-breaking `using UnityEditor;` from `KitchenObject.cs`.
 - Created this dev doc.
+
+### 2026-06-30 — Full pack + cooking
+- Expanded the generator to use the **whole seafood pack**: salmon, tuna, sea bass, sardine, anchovy, shrimp, lobster ×2, crab, mussel, oyster, scallop, squid, octopus (~60 items, ~30 cut recipes).
+- Added **cooking**: a tinted `Seafood_Cooked` material, cooked item variants, and **FryingRecipeSO** generation for the stove. The fillet/meat stage is now the **branch point** (cut → raw / stove → cooked). Calm cooking (no burn alarms).
+- Menu grew to **~21 dishes** (raw bar + grilled/seared/fried/steamed + combos). Plated visuals tint cooked ingredients.
+- Wiring guide: added **Step 2.5 — Stove**.
 
 ### 2026-06-30 — Item icon generator
 - Added `SpriteIconGenerator` (`Tide & Table ▸ Generate Item Icons`): renders each item prefab to a transparent sprite (URP `SubmitRenderRequest` + black/white alpha reconstruction) and assigns it to `KitchenObjectSO.icon`, so order tickets become readable. Idempotent + restylable via constants (§4.4).

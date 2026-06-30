@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9876c58168f14629814c64285b4b04b, type: 3}
+  m_Name: Lobster_Tail__fry__Lobster_TailCooked
+  m_EditorClassIdentifier: Assembly-CSharp::FryingRecipeSO
+  from: {fileID: 11400000, guid: 28c98ed2f40e2f54db79e2eb120e36ae, type: 2}
+  to: {fileID: 11400000, guid: 8695bafbf8537c645a9310659cf1ec35, type: 2}
+  fryingTime: 7
+  shouldWarning: 0

@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MenuRecipeSO
   ingredients:
   - {fileID: 11400000, guid: 99348e9d3cfe1f548b60a1e8e2d1269f, type: 2}
-  - {fileID: 11400000, guid: 148a6a808f16f9a478800d05f513d9d3, type: 2}
-  - {fileID: 11400000, guid: 4e895bcf04ab68546863b81de6e69f01, type: 2}
-  - {fileID: 11400000, guid: 72024613f1200a94e80758baa3832071, type: 2}
+  - {fileID: 11400000, guid: 067a28d231e0db641af2317f5abff2a7, type: 2}
+  - {fileID: 11400000, guid: c843328b098c07541b9fac62f2a21fcf, type: 2}
+  - {fileID: 11400000, guid: 2c04825dd995e3649b2ab1dbb0f3a187, type: 2}
   prefabVisual: {fileID: 2608290645425122148, guid: 58544132a097b294c8f346824b888217,
     type: 3}
   recipeName: Seafood Platter

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a7d6ec7527f146b6ab6b41621979196, type: 3}
+  m_Name: Anchovy_Fillet
+  m_EditorClassIdentifier: Assembly-CSharp::KitchenObjectSO
+  prefab: {fileID: 6051346464750641425, guid: 595906cb8cf201e4cb2f67e6ae321a33, type: 3}
+  icon: {fileID: 21300000, guid: 82ea91403d3ae434483d95f3883d78fe, type: 3}
+  objectName: Anchovy Fillet
+  petFood: 0

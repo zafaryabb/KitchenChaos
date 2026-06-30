@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddeecabdcc5eb488bbe692066430ff9a, type: 3}
+  m_Name: Scallop_Closed__to__Scallop_Open
+  m_EditorClassIdentifier: Assembly-CSharp::CuttingRecipeSO
+  from: {fileID: 11400000, guid: 961442bc99658bc4798cafc34d111f77, type: 2}
+  to: {fileID: 11400000, guid: 7c744614d51453a49a3884cc710b37d8, type: 2}
+  cutCount: 2
+  byproduct: {fileID: 0}
+  verb: 4

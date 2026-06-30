@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9876c58168f14629814c64285b4b04b, type: 3}
+  m_Name: Squid_Rings__fry__Squid_RingsCooked
+  m_EditorClassIdentifier: Assembly-CSharp::FryingRecipeSO
+  from: {fileID: 11400000, guid: 72024613f1200a94e80758baa3832071, type: 2}
+  to: {fileID: 11400000, guid: c843328b098c07541b9fac62f2a21fcf, type: 2}
+  fryingTime: 5
+  shouldWarning: 0

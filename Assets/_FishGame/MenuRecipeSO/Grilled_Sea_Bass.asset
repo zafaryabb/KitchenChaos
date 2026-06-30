@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e94a3344341ce46288b0bea9356702e7, type: 3}
+  m_Name: Grilled_Sea_Bass
+  m_EditorClassIdentifier: Assembly-CSharp::MenuRecipeSO
+  ingredients:
+  - {fileID: 11400000, guid: ce7047acb96d8b5439b1bc10767e2b11, type: 2}
+  prefabVisual: {fileID: 3919110826809877976, guid: 1a59e22064a0ea742832954dc9d138b0,
+    type: 3}
+  recipeName: Grilled Sea Bass

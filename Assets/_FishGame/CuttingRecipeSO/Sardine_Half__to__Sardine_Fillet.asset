@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddeecabdcc5eb488bbe692066430ff9a, type: 3}
+  m_Name: Sardine_Half__to__Sardine_Fillet
+  m_EditorClassIdentifier: Assembly-CSharp::CuttingRecipeSO
+  from: {fileID: 11400000, guid: d74130f55e16b3a4588e817e0e2464e9, type: 2}
+  to: {fileID: 11400000, guid: 8c6689983f605ed4eaed9dbb84d4b1d1, type: 2}
+  cutCount: 2
+  byproduct: {fileID: 11400000, guid: 764d851e742fca04d878379c6db2e42a, type: 2}
+  verb: 1

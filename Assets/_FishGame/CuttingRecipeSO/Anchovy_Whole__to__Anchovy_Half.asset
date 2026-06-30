@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddeecabdcc5eb488bbe692066430ff9a, type: 3}
+  m_Name: Anchovy_Whole__to__Anchovy_Half
+  m_EditorClassIdentifier: Assembly-CSharp::CuttingRecipeSO
+  from: {fileID: 11400000, guid: 0c37330cd6910e843b843c27eab7ad3e, type: 2}
+  to: {fileID: 11400000, guid: 947d424fc5fcf3448b63f14357f5bb93, type: 2}
+  cutCount: 2
+  byproduct: {fileID: 0}
+  verb: 0
