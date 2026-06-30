@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Shrimp_Whole
   m_EditorClassIdentifier: Assembly-CSharp::KitchenObjectSO
   prefab: {fileID: 1536242321642855532, guid: 78bc5c833a77b5d4887745a10b0dc20f, type: 3}
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 24beb1959016fa548b14e21e443a99d0, type: 3}
   objectName: Shrimp
   petFood: 0

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Squid_Rings
   m_EditorClassIdentifier: Assembly-CSharp::KitchenObjectSO
   prefab: {fileID: 8655073949240535435, guid: 7ad42ba3b7709d34797619847da674c7, type: 3}
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: be7361d821762894db95a2f102e1c83f, type: 3}
   objectName: Calamari Rings
   petFood: 0

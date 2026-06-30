@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Squid_Tube
   m_EditorClassIdentifier: Assembly-CSharp::KitchenObjectSO
   prefab: {fileID: 8281222956827251174, guid: 461c9e2831d15364aaafe06114beb5b4, type: 3}
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 3cd17a94af4a9ba4c9674d65a384bb5b, type: 3}
   objectName: Squid Tube
   petFood: 0

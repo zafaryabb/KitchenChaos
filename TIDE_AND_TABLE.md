@@ -53,12 +53,13 @@ serve — and feed the leftover skeletons & shells to a resident cat.
 | `Assets/Scripts/Counters/CuttingCounter/PerfectSliceIndicator.cs` | Visualises the perfect-slice sweep (moves a `marker` across a track, positions the `sweetZone`). Works world-space or UI. |
 | `Assets/Scripts/Game/ZenScoreManager.cs` | Additive, never-fail score: plates served, perfect slices, pets fed. Fires `OnScoreChanged` for UI. |
 | `Assets/Scripts/Editor/FishContentGenerator.cs` | **One-click content generator** (menu: `Tide & Table ▸ Generate Fish Content`). See §4. |
+| `Assets/Scripts/Editor/SpriteIconGenerator.cs` | **One-click icon generator** (menu: `Tide & Table ▸ Generate Item Icons`). Renders each item prefab to a transparent sprite and assigns it to `KitchenObjectSO.icon`. See §4.4. |
 
 ### 3.2 Modified scripts
 
 | File | Change |
 |---|---|
-| `Assets/Scripts/Counters/CuttingCounter/CuttingCounter.cs` | **Multi-stage** chained cutting; spawns a **byproduct** (skeleton) to an assigned scrap tray; **perfect-slice** rhythm + `OnAnyPerfectSlice`; exposes `IsCutting`, `HasCuttableItem`, `RhythmPhase`, `GetFocusPoint()` for camera/visuals. |
+| `Assets/Scripts/Counters/CuttingCounter/CuttingCounter.cs` | **Multi-stage** chained cutting; spawns a **byproduct** (skeleton) to an assigned scrap tray; **perfect-slice** rhythm + `OnAnyPerfectSlice`; exposes `IsCutting`, `HasCuttableItem`, `RhythmPhase`, `GetCameraPose()` for camera/visuals. |
 | `Assets/Scripts/Counters/CuttingCounter/CuttingCounterVisual.cs` | Knife trigger + DOTween squash, slice particles, perfect sparkle (all optional refs). |
 | `Assets/Scripts/ScriptableObjects/CuttingRecipeSO.cs` | Added `byproduct` (KitchenObjectSO) and cosmetic `ProcessVerb` enum (Cut/Fillet/Slice/Peel/Shuck/Ring/Chop). |
 | `Assets/Scripts/ScriptableObjects/KitchenObjectSO.cs` | Added `petFood` flag. |
@@ -153,6 +154,23 @@ warnings.
 > ingredients in any order resolves to the right dish and auto-upgrades to bigger
 > platters as you add more.
 
+### 4.4 Item icons (run after content)
+
+**Menu bar → `Tide & Table ▸ Generate Item Icons`.**
+
+Renders every item prefab under `_FishGame/KitchenObjectSO` to a transparent PNG
+in `_FishGame/Icons/`, imports it as a Sprite, and assigns it to that item's
+`KitchenObjectSO.icon`. The order tickets (`OrderUI`) read these icons, so this is
+what makes each recipe readable at a glance.
+
+- **Pipeline-correct:** uses URP's `SubmitRenderRequest` + a black/white two-pass
+  to reconstruct true transparency.
+- **Idempotent + restylable:** tweak the constants at the top of
+  `SpriteIconGenerator.cs` (`IconSize`, `ViewAngle`, `Padding`) and re-run to
+  restyle every icon at once.
+- Uses **layer 31** for an isolated capture rig — if you actually use layer 31 for
+  something, change `IsolationLayer`.
+
 ---
 
 ## 5. 🔧 In-scene wiring guide
@@ -171,13 +189,13 @@ Do these in the `GameScene`. Checkboxes track progress.
 - [ ] On a `CuttingCounter`, set **Cutting Recipes** = all assets in `_FishGame/CuttingRecipeSO`.
 - [ ] Add a small `ClearCounter` next to it as the **scrap tray**; assign it to the cutting counter's **Byproduct Output**.
 - [ ] (Optional) Create an empty above the board → assign to **Focus Point** (where the prep camera looks).
-- [ ] On the `CuttingCounter_Visual`, assign **itemAnchor** (the counter's item spawn point); optionally hook up **sliceParticles** / **perfectSparkle** particle systems.
-- [ ] (Optional) Add a `PerfectSliceIndicator` (world-space rig above the board): assign `cuttingCounter`, `root`, `marker`, `sweetZone`.
+- [ ] On the `CuttingCounter_Visual`, assign **itemAnchor** (the counter's item spawn point); (Later) optionally hook up **sliceParticles** / **perfectSparkle** particle systems.
+- [ ] (Later) (Optional) Add a `PerfectSliceIndicator` (world-space rig above the board): assign `cuttingCounter`, `root`, `marker`, `sweetZone`.
 
 ### Step 3 — Fish source(s)
 - [ ] Add a `ContainerCounter` per whole fish you want available; set **kitchenObject** = `Salmon_Whole` (and `Tuna_Whole`, `SeaBass_Whole`, `Squid_Whole`, `Shrimp_Whole`, `Crab_Whole`). Dress each with a KayKit crate / ice display.
 
-### Step 4 — Cat station
+### Step 4 — Cat station (Later)
 - [ ] Drop `Quirky Series ▸ … ▸ Prefabs ▸ Cat.prefab` into a cosy corner.
 - [ ] Add a `PetController` to the cat; assign its **Animator** (defaults match `AC_Cat`).
 - [ ] Create a `CatStationCounter` (a bowl visual + a collider on the **player interact layer** + a `spawnPoint`); assign the **Pet** = the cat's `PetController`.
@@ -185,14 +203,17 @@ Do these in the `GameScene`. Checkboxes track progress.
 ### Step 5 — Camera
 - [ ] Add a **CinemachineBrain** to the Main Camera (if not present).
 - [ ] Create a **gameplay vcam** (Priority 10) at your normal kitchen angle.
-- [ ] Create a **Prep vcam** with a *Framing Transposer* (Body) + *Composer* (Aim), framed over-the-shoulder. Priority 0.
-- [ ] Add an empty `PrepCameraDirector`; assign **prepCamera** = the Prep vcam.
-- [ ] (Optional, for the dreamy blur) add a **global Volume** with *Depth of Field*, weight 0 → assign to **prepVolume**.
+- [ ] Create a **Prep vcam**, set **Body = Do Nothing** and **Aim = Do Nothing**, then **position/rotate it by hand** in the Scene view for the over-the-shoulder board shot. Priority 0. *(Do Nothing = no procedural movement, so the angle stays exactly where you put it. Tip: frame it in the Game/Scene view, then `GameObject ▸ Align With View`.)*
+- [ ] Add an empty `PrepCameraDirector`; assign **prepCamera** = the Prep vcam. The director only blends it in/out — it never moves it.
+- [ ] (Optional, multiple boards) put an empty child on each `CuttingCounter` where you want that board's camera, and assign it to the counter's **Camera Pose**; the director snaps the prep vcam to it per station.
+- [ ] (Later) (Optional, for the dreamy blur) add a **global Volume** with *Depth of Field*, weight 0 → assign to **prepVolume**.
+
+> **Adjusting the angle:** just select the Prep vcam and move/rotate it (or move the per-station *Camera Pose* empty). Make sure its Body **and** Aim are both *Do Nothing* — if you see it swinging to weird angles, one of them is still set to a procedural mode (Transposer/Composer).
 
 ### Step 6 — Managers & polish
 - [ ] Add a `ZenScoreManager` alongside the other managers (GameManager, DeliveryManager, …).
 - [ ] (Later) drop SFX clips into the `SFXSO` asset (`slice`, `slicePerfect`, `peel`, `shuck`, `petEat`, `petPurr`) + an ambient track on `MusicManager`.
-- [ ] (Later) assign **icon** sprites on each `KitchenObjectSO` so order tickets show art.
+- [ ] Run `Tide & Table ▸ Generate Item Icons` to auto-fill `KitchenObjectSO.icon` so order tickets show art (§4.4).
 - [ ] (Later) swap `PlayerVisual` for an ithappy chef-kid body; keep/assign the humanoid controller.
 
 ### Step 7 — Play test
@@ -205,7 +226,7 @@ Do these in the `GameScene`. Checkboxes track progress.
 
 - **Cinemachine namespace:** code uses the 2.10.7 `Cinemachine` API (confirmed in `packages-lock.json`). If `PrepCameraDirector` ever errors on the namespace, it's an auto-reference hiccup — flag it.
 - **Plated offsets & item scale** are first-pass guesses (real mesh sizes unknown). Expect to nudge `*_Plated` prefabs and item prefab scales in the editor.
-- **Order icons:** `KitchenObjectSO.icon` is empty until you add food sprites; tickets show blank slots meanwhile.
+- **Order icons:** run `Tide & Table ▸ Generate Item Icons` (§4.4) to auto-fill `KitchenObjectSO.icon` for every item; tickets show blank slots until you do.
 - **Zen timer HUD:** the running timer freezes (doesn't end the game) in `zenMode`; we'll hide/replace it later.
 - **SFX:** all new sound slots are empty and null-guarded — silent until you wire clips.
 
@@ -227,5 +248,12 @@ Do these in the `GameScene`. Checkboxes track progress.
 - Wrote the one-click `FishContentGenerator` and seeded **21 items / 13 cutting chains / 8 dishes** (§4).
 - Confirmed DOTween modules + Cinemachine 2.10.7 resolve correctly; removed a build-breaking `using UnityEditor;` from `KitchenObject.cs`.
 - Created this dev doc.
+
+### 2026-06-30 — Item icon generator
+- Added `SpriteIconGenerator` (`Tide & Table ▸ Generate Item Icons`): renders each item prefab to a transparent sprite (URP `SubmitRenderRequest` + black/white alpha reconstruction) and assigns it to `KitchenObjectSO.icon`, so order tickets become readable. Idempotent + restylable via constants (§4.4).
+
+### 2026-06-30 — Prep camera fix
+- Reworked `PrepCameraDirector` to **stop driving the prep vcam procedurally** (the old Follow/LookAt override caused wild angles). The shot is now a **hand-composed static vcam** (Body/Aim = Do Nothing); the director only blends priority + DoF.
+- Replaced `CuttingCounter.focusPoint` with an optional **`cameraPose`** transform so each board can have its own composed shot (the director snaps the vcam to it). Updated Step 5 wiring accordingly.
 
 <!-- Add new dated entries above this line as we build. -->

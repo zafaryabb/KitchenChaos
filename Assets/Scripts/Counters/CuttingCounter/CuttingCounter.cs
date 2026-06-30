@@ -63,9 +63,11 @@ public class CuttingCounter : ClearCounter, IProgressTracked
     [Range(0f, 1f)]
     [SerializeField] private float perfectTargetCenter = 0.5f;
 
-    [Header("Camera focus")]
-    [Tooltip("Where the over-the-shoulder prep camera looks. Defaults to the item spawn point.")]
-    [SerializeField] private Transform focusPoint;
+    [Header("Camera")]
+    [Tooltip("Optional. If set, the prep camera snaps to this transform's position + rotation while " +
+             "cutting here (compose it by hand in the Scene view). If left empty, the prep camera just " +
+             "uses whatever shot you composed on the vcam itself.")]
+    [SerializeField] private Transform cameraPose;
 
     private CuttingRecipeSO activeCuttingRecipe;
     private int cuttingProgress;
@@ -82,7 +84,9 @@ public class CuttingCounter : ClearCounter, IProgressTracked
     public float RhythmPhase => rhythmPhase;
     public float PerfectTargetCenter => perfectTargetCenter;
     public float PerfectWindow => perfectWindow;
-    public Transform GetFocusPoint() => focusPoint != null ? focusPoint : spawnPoint;
+
+    /// <summary>Optional composed pose the prep camera should snap to for this station (may be null).</summary>
+    public Transform GetCameraPose() => cameraPose;
 
     private void Start()
     {

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Crab_Whole
   m_EditorClassIdentifier: Assembly-CSharp::KitchenObjectSO
   prefab: {fileID: 8463015531808374096, guid: 24e0d7affc21e414cbda4a5ee24581b6, type: 3}
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 14b7551cfb8187c408225f2f5bc0e2db, type: 3}
   objectName: Crab
   petFood: 0

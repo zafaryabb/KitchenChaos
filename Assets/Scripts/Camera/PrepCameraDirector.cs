@@ -4,29 +4,29 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 /// <summary>
-/// Eases the camera into a calm over-the-shoulder close-up whenever the player
-/// stands at a cutting station holding something cuttable (or is mid-cut), and
-/// eases back out to the normal gameplay view when they step away.
+/// Blends the camera into a calm, hand-composed close-up of the cutting board
+/// whenever the player stands at a cutting station holding something cuttable
+/// (or is mid-cut), and blends back out when they step away.
 ///
-/// Setup in the scene:
-///  - A Cinemachine Brain on the Main Camera.
-///  - A normal gameplay virtual camera (any priority, e.g. 10).
-///  - A "Prep" virtual camera assigned to <see cref="prepCamera"/>. Give it a
-///    Framing Transposer (body) + Composer (aim) so it frames nicely over the
-///    chef's shoulder; this director sets its Follow/LookAt and raises its
-///    priority when engaged.
-///  - (Optional) a global post-process <see cref="prepVolume"/> holding Depth of
-///    Field; its weight is eased 0..1 so the kitchen softly blurs away.
+/// IMPORTANT: this director does NOT drive the prep camera's position/rotation
+/// procedurally — the shot is whatever you compose on the vcam in the Scene view.
+/// That keeps the angle stable and fully under your control. To adjust the shot,
+/// just move/rotate the Prep vcam (or, for per-station shots, assign a
+/// <c>cameraPose</c> on each CuttingCounter and the director snaps to it).
+///
+/// Scene setup:
+///  - CinemachineBrain on the Main Camera.
+///  - A gameplay vcam (Priority 10) at your normal kitchen angle.
+///  - A "Prep" vcam assigned to <see cref="prepCamera"/>, with **Body = Do Nothing**
+///    and **Aim = Do Nothing**, positioned by hand over the chef's shoulder.
+///  - (Optional) a global post-process <see cref="prepVolume"/> with Depth of Field;
+///    its weight is eased 0..1 so the kitchen softly blurs away.
 /// </summary>
 public class PrepCameraDirector : MonoBehaviour
 {
     [SerializeField] private CinemachineVirtualCamera prepCamera;
     [SerializeField] private int engagedPriority = 20;
     [SerializeField] private int disengagedPriority = 0;
-
-    [Header("Over-the-shoulder framing")]
-    [Tooltip("Camera follows this rig; if left empty it follows the player transform.")]
-    [SerializeField] private Transform followOverride;
 
     [Header("Optional depth-of-field volume")]
     [SerializeField] private Volume prepVolume;
@@ -53,19 +53,19 @@ public class PrepCameraDirector : MonoBehaviour
         CuttingCounter station = GetActiveCuttingStation();
         bool shouldEngage = station != null;
 
-        if (shouldEngage)
+        if (shouldEngage && prepCamera != null)
         {
-            if (prepCamera != null)
+            // If this station provides a composed pose, snap the (static) prep
+            // vcam to it so different boards can have different shots. Otherwise
+            // we leave the vcam exactly as you composed it.
+            Transform pose = station.GetCameraPose();
+            if (pose != null)
             {
-                prepCamera.Follow = followOverride != null ? followOverride : Player.Instance.transform;
-                prepCamera.LookAt = station.GetFocusPoint();
+                prepCamera.transform.SetPositionAndRotation(pose.position, pose.rotation);
             }
-            SetEngaged(true);
         }
-        else
-        {
-            SetEngaged(false);
-        }
+
+        SetEngaged(shouldEngage);
     }
 
     private CuttingCounter GetActiveCuttingStation()

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Fish_Skeleton
   m_EditorClassIdentifier: Assembly-CSharp::KitchenObjectSO
   prefab: {fileID: 4576999715152606011, guid: 9d953813620d12b4a9e833a412cd6233, type: 3}
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 3686e15009c50f04d94a1d4b5255ad62, type: 3}
   objectName: Fish Skeleton
   petFood: 1

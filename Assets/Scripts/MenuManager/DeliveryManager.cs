@@ -67,7 +67,7 @@ public class DeliveryManager : MonoBehaviour
                     int index = UnityEngine.Random.Range(0, menu.menuRecipes.Count);
                     MenuRecipeSO selectedRecipe = menu.menuRecipes[index];
                     orders.Add(selectedRecipe);
-                    Debug.LogFormat("<color=green>Order \"{0}\" was placed</color>", selectedRecipe.recipeName);
+                    //Debug.LogFormat("<color=green>Order \"{0}\" was placed</color>", selectedRecipe.recipeName);
                     OnOrderPlaced?.Invoke(this, selectedRecipe);
                 }
             }

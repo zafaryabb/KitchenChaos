@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Shrimp_Peeled
   m_EditorClassIdentifier: Assembly-CSharp::KitchenObjectSO
   prefab: {fileID: 360124183641330846, guid: 1d4ddf21362d4634981a0c2ea326cb50, type: 3}
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 52a439f0a793b4e4fb1b8d24e375c806, type: 3}
   objectName: Peeled Shrimp
   petFood: 0

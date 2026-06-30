@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Tuna_Half
   m_EditorClassIdentifier: Assembly-CSharp::KitchenObjectSO
   prefab: {fileID: 8339464461492907808, guid: fbed11c0d5937824992ef12c4c5b03a0, type: 3}
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: b53447ecc14ab9445985951ce872311f, type: 3}
   objectName: Tuna Half
   petFood: 0

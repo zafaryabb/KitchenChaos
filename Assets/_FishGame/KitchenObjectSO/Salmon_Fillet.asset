@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Salmon_Fillet
   m_EditorClassIdentifier: Assembly-CSharp::KitchenObjectSO
   prefab: {fileID: 480427904103817656, guid: 2c78ee0935c63c94a83ba049560b9888, type: 3}
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: dee8f85ebd416284b9471b532cbeb40d, type: 3}
   objectName: Salmon Fillet
   petFood: 0

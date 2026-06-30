@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: SeaBass_Half
   m_EditorClassIdentifier: Assembly-CSharp::KitchenObjectSO
   prefab: {fileID: 1579152657560204674, guid: 56e78100f67c3a74eab535f4707a1a62, type: 3}
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: f14353c4657a5bd47bb4c504d27e1746, type: 3}
   objectName: Sea Bass Half
   petFood: 0
