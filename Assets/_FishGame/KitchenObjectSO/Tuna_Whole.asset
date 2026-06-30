@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a7d6ec7527f146b6ab6b41621979196, type: 3}
+  m_Name: Tuna_Whole
+  m_EditorClassIdentifier: Assembly-CSharp::KitchenObjectSO
+  prefab: {fileID: 8032830136669622625, guid: 28cd314e1b5b24549924be056c29bb18, type: 3}
+  icon: {fileID: 0}
+  objectName: Tuna
+  petFood: 0

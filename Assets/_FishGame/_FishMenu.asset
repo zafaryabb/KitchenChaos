@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 302044b6e6dfa42548d6970174d51a31, type: 3}
+  m_Name: _FishMenu
+  m_EditorClassIdentifier: Assembly-CSharp::MenuSO
+  menuRecipes:
+  - {fileID: 11400000, guid: 694f18e753b33e04281e2787bcb314aa, type: 2}
+  - {fileID: 11400000, guid: 40494fba057706646924249f97d9b434, type: 2}
+  - {fileID: 11400000, guid: b4495097bd8b436469c40d163c45ab43, type: 2}
+  - {fileID: 11400000, guid: 494cd81b03c08d3469e8f3904efebb4b, type: 2}
+  - {fileID: 11400000, guid: e025288d68ff5a1419f29f89651d6c0e, type: 2}
+  - {fileID: 11400000, guid: c517e42ae3ccf17488be2db396eff1a4, type: 2}
+  - {fileID: 11400000, guid: 9d35c6e1eab49eb4497f990aaf937e7d, type: 2}
+  - {fileID: 11400000, guid: dcbeb533e15f907419c77dc594e2d29f, type: 2}

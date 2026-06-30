@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a7d6ec7527f146b6ab6b41621979196, type: 3}
+  m_Name: Salmon_Fillet
+  m_EditorClassIdentifier: Assembly-CSharp::KitchenObjectSO
+  prefab: {fileID: 480427904103817656, guid: 2c78ee0935c63c94a83ba049560b9888, type: 3}
+  icon: {fileID: 0}
+  objectName: Salmon Fillet
+  petFood: 0

@@ -166,6 +166,15 @@ public class Player : MonoBehaviour, IKitchenObjectHolder
         OnSelectedCounterChange?.Invoke(this, new OnSelectedCounterChangeEventArg { selected = newCounter });
     }
 
+    /// <summary>
+    /// The counter the player is currently looking at, or null. Used by the prep
+    /// camera director to know when to lean into a cutting station.
+    /// </summary>
+    public KitchenCounter GetSelectedCounter()
+    {
+        return selectedCounter;
+    }
+
     #endregion
 
     #region IKitchenObjectHolder Impl

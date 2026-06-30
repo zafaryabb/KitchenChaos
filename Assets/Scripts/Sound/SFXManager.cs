@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SFXManager : MonoBehaviour
@@ -42,41 +40,74 @@ public class SFXManager : MonoBehaviour
     {
         DeliveryManager.Instance.OnOrderDelivered += (obj, _) => PlaySFX(sfx.deliverySuccess, DeliveryManager.Instance.transform.position);
         DeliveryManager.Instance.OnFailedOrderDeliver += (obj, _) => PlaySFX(sfx.deliveryFail, DeliveryManager.Instance.transform.position);
-        CuttingCounter.OnAnyCut += (obj, _) => PlaySFX(sfx.chop, (obj as CuttingCounter).transform.position);
+        CuttingCounter.OnAnyCut += (obj, _) => PlaySFX(FirstNonEmpty(sfx.slice, sfx.chop), (obj as CuttingCounter).transform.position);
+        CuttingCounter.OnAnyPerfectSlice += (obj, _) => PlaySFX(sfx.slicePerfect, (obj as CuttingCounter).transform.position);
+        CatStationCounter.OnAnyPetFed += CatStationCounter_OnAnyPetFed;
         Player.Instance.OnPlayerPickedUp += (obj, _) => PlaySFX(sfx.objectPickup, (obj as Player).transform.position);
         PlateKitchenObject.OnAnyIngredientAdded += (obj, _) => PlaySFX(sfx.objectPickup, (obj as PlateKitchenObject).transform.position);
         HolderCounter.OnAnyItemPlaced += (obj, _) => PlaySFX(sfx.objectDrop, (obj as HolderCounter).transform.position);
         TrashCounter.OnAnyItemTrashed += (obj, _) => PlaySFX(sfx.trash, (obj as TrashCounter).transform.position);
     }
 
+    private void CatStationCounter_OnAnyPetFed(object sender, int e)
+    {
+        Vector3 position = (sender as CatStationCounter).transform.position;
+        PlaySFX(sfx.petEat, position);
+        PlaySFX(sfx.petPurr, position);
+    }
+
     public void PlayWarningSound(Vector3 position, float volumeMultipler = 1f)
     {
-        PlaySFX(sfx.warn[1], position, volumeMultipler);
+        PlaySFX(SafeIndex(sfx.warn, 1), position, volumeMultipler);
     }
 
     public void PlayCountdownSound(float volumeMultipler = 1f)
     {
-        PlaySFX(sfx.warn[0], Camera.main.transform.position, volumeMultipler);
+        PlaySFX(SafeIndex(sfx.warn, 0), Camera.main.transform.position, volumeMultipler);
     }
 
     public void PlayWalkingSound(Vector3 position, float volumeMultipler = 1f)
     {
-        PlaySFX(sfx.walk[MovingSFXIndex], position, volumeMultipler);
+        PlaySFX(SafeIndex(sfx.walk, MovingSFXIndex), position, volumeMultipler);
     }
 
     public void PlaySprintingSound(Vector3 position, float volumeMultipler = 1f)
     {
-        PlaySFX(sfx.sprint[MovingSFXIndex], position, volumeMultipler);
+        PlaySFX(SafeIndex(sfx.sprint, MovingSFXIndex), position, volumeMultipler);
     }
 
     private void PlaySFX(AudioClip[] clip, Vector3 position, float volumeMultipler = 1f)
     {
+        if (clip == null || clip.Length == 0)
+        {
+            return;
+        }
         PlaySFX(clip[UnityEngine.Random.Range(0, clip.Length)], position, volumeMultipler);
     }
 
     private void PlaySFX(AudioClip clip, Vector3 position, float volumeMultipler = 1f)
     {
+        if (clip == null)
+        {
+            // clip not wired up yet — stay silent rather than throwing
+            return;
+        }
         AudioSource.PlayClipAtPoint(clip, position, Volume * volumeMultipler);
+    }
+
+    /// <summary>Returns the first array that actually has clips, so new sounds can fall back to old ones.</summary>
+    private static AudioClip[] FirstNonEmpty(AudioClip[] primary, AudioClip[] fallback)
+    {
+        return (primary != null && primary.Length > 0) ? primary : fallback;
+    }
+
+    private static AudioClip SafeIndex(AudioClip[] clips, int index)
+    {
+        if (clips == null || clips.Length == 0)
+        {
+            return null;
+        }
+        return clips[Mathf.Clamp(index, 0, clips.Length - 1)];
     }
 
     public void IncreaseVolumeLevel()

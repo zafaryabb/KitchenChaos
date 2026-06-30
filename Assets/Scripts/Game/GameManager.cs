@@ -26,6 +26,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float gameStartCountdownTime = 4f;
     [SerializeField] private float gameTime = 60f;
 
+    [Tooltip("Calm mode: the running timer never ends the game, so play is endless and soothing.")]
+    [SerializeField] private bool zenMode = true;
+    public bool ZenMode => zenMode;
+
     private State currentState, previousState;
     public bool IsPlaying => currentState == State.GAME_RUNNING;
 
@@ -147,14 +151,17 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator HandleGameRunning()
     {
-        while (!GameRunningCountdownEnded)
+        while (zenMode || !GameRunningCountdownEnded)
         {
             if (paused)
             {
                 SetState(State.GAME_PAUSING);
                 yield break;
             }
-            gameRunningCountdown -= Time.deltaTime;
+            if (!zenMode)
+            {
+                gameRunningCountdown -= Time.deltaTime;
+            }
             yield return null;   // wait for end of frame
         }
         SetState(State.GAME_END);

@@ -1,0 +1,231 @@
+# 🐟 Tide & Table — Dev Doc
+
+A calm, soothing **fish restaurant** game built on top of the Kitchen Chaos
+codebase. The game revolves around **beautifully cutting fish** and **plating
+seafood dishes**: customers order, you prep (fillet / peel / shuck / ring), plate,
+serve — and feed the leftover skeletons & shells to a resident cat.
+
+> This file is the running record of **what we've built** and **how to wire it up
+> in the Unity scene**. Update the Changelog at the bottom as we go.
+
+- **Engine:** Unity `6000.3.17f1` (URP 17, Cinemachine 2.10.7, Input System, Timeline)
+- **Working title:** *Tide & Table*
+- **Base project:** Code Monkey "Kitchen Chaos" (heavily refactored, event-driven)
+
+---
+
+## 1. Design pillars (decided)
+
+| Topic | Decision |
+|---|---|
+| **Pace / pressure** | **Soft pressure.** No game-over. `zenMode` is on by default so the timer never ends play. Customer patience / tip falloff comes later (Phase 3). |
+| **Cutting feel** | **Taps + perfect-slice.** Tap to advance each cut stage; an optional sweet-spot earns a sparkle + small bonus. Missing never punishes. |
+| **Camera** | **Over-the-shoulder** cinematic close-up on prep (Cinemachine), with optional depth-of-field blur. Normal walk-around movement is unchanged. |
+| **Character** | A cute **cartoon chef kid** (ithappy *Cute Characters*). Knife stays a separate animated prop (no hand-IK needed). Swap-in is deferred, not required to play. |
+| **Workflow** | **Claude builds** scripts + ScriptableObjects + the content generator. **You place/arrange** prefabs in the scene. |
+
+---
+
+## 2. Imported asset packs
+
+| Pack | Location | Used for |
+|---|---|---|
+| Cartoon Seafood Pack (Mnostva) | `Assets/Mnostva_Art/Cartoon_Seafood_Pack` | All fish/shellfish, with built-in cut stages (Whole→Half→Fillet→Slice), skeletons, rings |
+| KayKit Restaurant Bits | `Assets/KayKit` | Modular kitchen/restaurant environment, cutting board, knife, order window, tables |
+| DOTween | `Assets/Plugins/Demigiant/DOTween` | Juice/tweens (squash, hops, camera DoF blend) |
+| Quirky Series – Pets Vol.1 | `Assets/Quirky Series/.../Pets Vol.1` | **Cat** & **Dog** (animator controllers `AC_Cat` / `AC_Dog` with `Idle_A`, `Eat`, `Eyes_Happy`, …) |
+| ithappy – Cute Characters | `Assets/ithappy/Cute_Characters` | Modular chef-kid character (idle/walk humanoid anims + controllers) |
+
+> ⚠️ If fish render **pink/magenta**, import the URP materials:
+> `Assets/Mnostva_Art/Cartoon_Seafood_Pack/Render_Pipeline/URP_Cartoon_Seafood_Pack.unitypackage`
+
+---
+
+## 3. What's been built — Phase 1 ("The Beautiful Cut")
+
+### 3.1 New scripts
+
+| File | Purpose |
+|---|---|
+| `Assets/Scripts/Camera/PrepCameraDirector.cs` | Eases an OTS Cinemachine vcam (+ optional DoF Volume) in when you're at a board with a cuttable item / mid-cut, and out when you leave. |
+| `Assets/Scripts/Pets/PetController.cs` | Drives the cat/dog animator by **state name** (`Idle_A`, `Eat`, `Eyes_Happy`). `Feed()` plays the eat reaction + a little hop, then returns to idle. Fully null-guarded. |
+| `Assets/Scripts/Counters/CatStationCounter.cs` | Drop-off counter that accepts only `petFood` items (skeletons/shells), feeds the pet, and ticks the score. Static event `OnAnyPetFed`. |
+| `Assets/Scripts/Counters/CuttingCounter/PerfectSliceIndicator.cs` | Visualises the perfect-slice sweep (moves a `marker` across a track, positions the `sweetZone`). Works world-space or UI. |
+| `Assets/Scripts/Game/ZenScoreManager.cs` | Additive, never-fail score: plates served, perfect slices, pets fed. Fires `OnScoreChanged` for UI. |
+| `Assets/Scripts/Editor/FishContentGenerator.cs` | **One-click content generator** (menu: `Tide & Table ▸ Generate Fish Content`). See §4. |
+
+### 3.2 Modified scripts
+
+| File | Change |
+|---|---|
+| `Assets/Scripts/Counters/CuttingCounter/CuttingCounter.cs` | **Multi-stage** chained cutting; spawns a **byproduct** (skeleton) to an assigned scrap tray; **perfect-slice** rhythm + `OnAnyPerfectSlice`; exposes `IsCutting`, `HasCuttableItem`, `RhythmPhase`, `GetFocusPoint()` for camera/visuals. |
+| `Assets/Scripts/Counters/CuttingCounter/CuttingCounterVisual.cs` | Knife trigger + DOTween squash, slice particles, perfect sparkle (all optional refs). |
+| `Assets/Scripts/ScriptableObjects/CuttingRecipeSO.cs` | Added `byproduct` (KitchenObjectSO) and cosmetic `ProcessVerb` enum (Cut/Fillet/Slice/Peel/Shuck/Ring/Chop). |
+| `Assets/Scripts/ScriptableObjects/KitchenObjectSO.cs` | Added `petFood` flag. |
+| `Assets/Scripts/Players/Player.cs` | Added `GetSelectedCounter()` (used by the camera director). |
+| `Assets/Scripts/Game/GameManager.cs` | Added `zenMode` (default **on**) — running timer no longer ends the game. |
+| `Assets/Scripts/ScriptableObjects/SFXSO.cs` | Added empty clip slots: `slice`, `slicePerfect`, `peel`, `shuck`, `petEat`, `petPurr`. |
+| `Assets/Scripts/Sound/SFXManager.cs` | Wired perfect-slice + pet-feed SFX; **null/empty guards** so unwired clips never throw. `slice` falls back to `chop`. |
+| `Assets/Scripts/Utilities/StaticDataReset.cs` | Resets `CatStationCounter` statics on scene load. |
+| `Assets/Scripts/KitchenObjects/KitchenObject.cs` | Removed a dead `using UnityEditor;` (would have broken player builds). |
+
+### 3.3 How it fits together (flow)
+
+```
+Whole fish (ContainerCounter source)
+   → CuttingCounter: alt-interact repeatedly
+        • each stage swaps the mesh (Whole→Half→Fillet→Sashimi)
+        • perfect-slice sweet spot → sparkle + bonus
+        • filleting drops a Fish_Skeleton onto the scrap tray
+   → carry the portion to a Plate (plated visual reveals per ingredient)
+   → DeliveryCounter: matches an open order → served (+score)
+   → carry the skeleton/shell to the CatStationCounter → cat eats & purrs (+score)
+```
+
+Prep camera (`PrepCameraDirector`) leans into the OTS close-up the whole time you're
+at the board, then eases back out when you step away.
+
+---
+
+## 4. Content generator (run this first)
+
+**Menu bar → `Tide & Table ▸ Generate Fish Content`.**
+
+It creates everything under `Assets/_FishGame/` (the burger content is left
+untouched) and is **idempotent** — edit the data tables at the bottom of
+`FishContentGenerator.cs` and re-run any time.
+
+Produces:
+- `KitchenObjectSO/` — one SO per item
+- `Prefabs/` — one item prefab per SO (wraps the seafood mesh + `KitchenObject`)
+- `CuttingRecipeSO/` — the cutting chains
+- `MenuRecipeSO/` + `PlatedVisuals/` — dishes and their plated presentation prefabs
+- `_FishMenu.asset` — the `MenuSO` listing every dish
+
+After running, **check the Console** for the summary line and any "missing mesh"
+warnings.
+
+### 4.1 Items (21)
+
+| Item id | Display | Source mesh | Pet food |
+|---|---|---|---|
+| Salmon_Whole / _Half / _Fillet / _Sashimi | Salmon line | `Salmon_1[_Half_1/_Fillet_1/_Slice]` | – |
+| Tuna_Whole / _Half / _Fillet / _Sashimi | Tuna line | `Tuna_1[…]` | – |
+| SeaBass_Whole / _Half / _Fillet / _Sashimi | Sea Bass line | `SeaBass_1[…]` | – |
+| Squid_Whole / _Tube / _Rings | Squid line | `Squid_1` / `_Fillet_1` / `_Ring_1` | – |
+| Shrimp_Whole / _Peeled | Shrimp line | `Shrimp_1` / `_Peeled_1` | – |
+| Crab_Whole / _Meat | Crab line | `Crab_1` / `_Claw_1` | – |
+| Crab_Shell | scrap | `Crab_1_Shell` | ✅ |
+| Fish_Skeleton | scrap | `Skeleton_Fish_1` | ✅ |
+
+### 4.2 Cutting chains (13)
+
+| From → To | Cuts | Verb | Byproduct |
+|---|---|---|---|
+| Salmon_Whole → Salmon_Half | 3 | Cut | – |
+| Salmon_Half → Salmon_Fillet | 3 | Fillet | Fish_Skeleton |
+| Salmon_Fillet → Salmon_Sashimi | 4 | Slice | – |
+| Tuna_Whole → Tuna_Half | 3 | Cut | – |
+| Tuna_Half → Tuna_Fillet | 3 | Fillet | Fish_Skeleton |
+| Tuna_Fillet → Tuna_Sashimi | 4 | Slice | – |
+| SeaBass_Whole → SeaBass_Half | 3 | Cut | – |
+| SeaBass_Half → SeaBass_Fillet | 3 | Fillet | Fish_Skeleton |
+| SeaBass_Fillet → SeaBass_Sashimi | 4 | Slice | – |
+| Squid_Whole → Squid_Tube | 3 | Cut | – |
+| Squid_Tube → Squid_Rings | 4 | Ring | – |
+| Shrimp_Whole → Shrimp_Peeled | 3 | Peel | – |
+| Crab_Whole → Crab_Meat | 4 | Shuck | Crab_Shell |
+
+### 4.3 Dishes (8)
+
+| Dish | Ingredients |
+|---|---|
+| Salmon Sashimi | Salmon_Sashimi |
+| Tuna Sashimi | Tuna_Sashimi |
+| Sea Bass Sashimi | SeaBass_Sashimi |
+| Calamari Rings | Squid_Rings |
+| Shrimp Plate | Shrimp_Peeled |
+| Crab Plate | Crab_Meat |
+| Sashimi Trio | Salmon_Sashimi + Tuna_Sashimi + SeaBass_Sashimi |
+| Seafood Platter | Salmon_Sashimi + Tuna_Sashimi + Shrimp_Peeled + Squid_Rings |
+
+> Plate matching is **subset-based** (existing `MenuManager`), so adding the
+> ingredients in any order resolves to the right dish and auto-upgrades to bigger
+> platters as you add more.
+
+---
+
+## 5. 🔧 In-scene wiring guide
+
+Do these in the `GameScene`. Checkboxes track progress.
+
+### Step 0 — Generate content
+- [ ] Run `Tide & Table ▸ Generate Fish Content`; confirm `Assets/_FishGame/` is populated and the Console has no errors.
+- [ ] (If fish are pink) import the seafood **URP** unitypackage (see §2).
+
+### Step 1 — Menu
+- [ ] Select `DeliveryManager` → set **Menu** = `_FishGame/_FishMenu.asset`.
+- [ ] Select `MenuManager` → set **Menu** = `_FishGame/_FishMenu.asset`.
+
+### Step 2 — Cutting station
+- [ ] On a `CuttingCounter`, set **Cutting Recipes** = all assets in `_FishGame/CuttingRecipeSO`.
+- [ ] Add a small `ClearCounter` next to it as the **scrap tray**; assign it to the cutting counter's **Byproduct Output**.
+- [ ] (Optional) Create an empty above the board → assign to **Focus Point** (where the prep camera looks).
+- [ ] On the `CuttingCounter_Visual`, assign **itemAnchor** (the counter's item spawn point); optionally hook up **sliceParticles** / **perfectSparkle** particle systems.
+- [ ] (Optional) Add a `PerfectSliceIndicator` (world-space rig above the board): assign `cuttingCounter`, `root`, `marker`, `sweetZone`.
+
+### Step 3 — Fish source(s)
+- [ ] Add a `ContainerCounter` per whole fish you want available; set **kitchenObject** = `Salmon_Whole` (and `Tuna_Whole`, `SeaBass_Whole`, `Squid_Whole`, `Shrimp_Whole`, `Crab_Whole`). Dress each with a KayKit crate / ice display.
+
+### Step 4 — Cat station
+- [ ] Drop `Quirky Series ▸ … ▸ Prefabs ▸ Cat.prefab` into a cosy corner.
+- [ ] Add a `PetController` to the cat; assign its **Animator** (defaults match `AC_Cat`).
+- [ ] Create a `CatStationCounter` (a bowl visual + a collider on the **player interact layer** + a `spawnPoint`); assign the **Pet** = the cat's `PetController`.
+
+### Step 5 — Camera
+- [ ] Add a **CinemachineBrain** to the Main Camera (if not present).
+- [ ] Create a **gameplay vcam** (Priority 10) at your normal kitchen angle.
+- [ ] Create a **Prep vcam** with a *Framing Transposer* (Body) + *Composer* (Aim), framed over-the-shoulder. Priority 0.
+- [ ] Add an empty `PrepCameraDirector`; assign **prepCamera** = the Prep vcam.
+- [ ] (Optional, for the dreamy blur) add a **global Volume** with *Depth of Field*, weight 0 → assign to **prepVolume**.
+
+### Step 6 — Managers & polish
+- [ ] Add a `ZenScoreManager` alongside the other managers (GameManager, DeliveryManager, …).
+- [ ] (Later) drop SFX clips into the `SFXSO` asset (`slice`, `slicePerfect`, `peel`, `shuck`, `petEat`, `petPurr`) + an ambient track on `MusicManager`.
+- [ ] (Later) assign **icon** sprites on each `KitchenObjectSO` so order tickets show art.
+- [ ] (Later) swap `PlayerVisual` for an ithappy chef-kid body; keep/assign the humanoid controller.
+
+### Step 7 — Play test
+- [ ] Grab a whole salmon → place on the board → alt-interact to fillet through the stages.
+- [ ] Confirm: camera leans OTS, perfect-slice sparkles, skeleton lands on the tray, plating reveals, delivery matches an order, cat eats when fed.
+
+---
+
+## 6. ⚠️ Notes & assumptions
+
+- **Cinemachine namespace:** code uses the 2.10.7 `Cinemachine` API (confirmed in `packages-lock.json`). If `PrepCameraDirector` ever errors on the namespace, it's an auto-reference hiccup — flag it.
+- **Plated offsets & item scale** are first-pass guesses (real mesh sizes unknown). Expect to nudge `*_Plated` prefabs and item prefab scales in the editor.
+- **Order icons:** `KitchenObjectSO.icon` is empty until you add food sprites; tickets show blank slots meanwhile.
+- **Zen timer HUD:** the running timer freezes (doesn't end the game) in `zenMode`; we'll hide/replace it later.
+- **SFX:** all new sound slots are empty and null-guarded — silent until you wire clips.
+
+---
+
+## 7. 🔜 Roadmap
+
+- **Phase 2 — Variety:** more fish variants (_2/_3 meshes), cooking/grilling (needs cooked-look meshes or tinted variants), oyster/mussel/scallop shucking, lobster.
+- **Phase 3 — Service & zen tuning:** customers at the `wall_orderwindow`, patient timers + soft tip falloff, satisfaction meter, plating polish.
+- **Phase 4 — Content & dressing:** full menu, restaurant environment build-out (KayKit), day/session structure, soft scoring UI, save.
+
+---
+
+## 8. 📓 Changelog
+
+### 2026-06-30 — Phase 1 systems + content pipeline
+- Reimagined the design as a calm fish restaurant; locked the 5 design pillars (§1).
+- Built the multi-stage cutting system, byproduct/skeleton spawning, perfect-slice sweet spot, OTS prep camera, cat station + pet controller, zen score, and SFX hooks (§3).
+- Wrote the one-click `FishContentGenerator` and seeded **21 items / 13 cutting chains / 8 dishes** (§4).
+- Confirmed DOTween modules + Cinemachine 2.10.7 resolve correctly; removed a build-breaking `using UnityEditor;` from `KitchenObject.cs`.
+- Created this dev doc.
+
+<!-- Add new dated entries above this line as we build. -->

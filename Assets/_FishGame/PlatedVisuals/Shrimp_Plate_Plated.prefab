@@ -1,0 +1,290 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1067483838532900314
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4172956532898831243}
+  m_Layer: 0
+  m_Name: Shrimp_Peeled
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4172956532898831243
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067483838532900314}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5199049574834763960}
+  - {fileID: 363739355383722604}
+  - {fileID: 7754201153089866923}
+  m_Father: {fileID: 8556571262254983066}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8655920470690126471
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8556571262254983066}
+  m_Layer: 0
+  m_Name: Shrimp_Plate_Plated
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8556571262254983066
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8655920470690126471}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4172956532898831243}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &66742685275266108
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4172956532898831243}
+    m_Modifications:
+    - target: {fileID: 6934059565337594413, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_Name
+      value: Shrimp_1_Peeled_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bf7bb7d509487d94fa063bee9ac5bc95, type: 3}
+--- !u!4 &7754201153089866923 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+    type: 3}
+  m_PrefabInstance: {fileID: 66742685275266108}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2546740276370827311
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4172956532898831243}
+    m_Modifications:
+    - target: {fileID: 6934059565337594413, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_Name
+      value: Shrimp_1_Peeled_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9848078
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.1736482
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bf7bb7d509487d94fa063bee9ac5bc95, type: 3}
+--- !u!4 &5199049574834763960 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+    type: 3}
+  m_PrefabInstance: {fileID: 2546740276370827311}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7961565651432203003
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4172956532898831243}
+    m_Modifications:
+    - target: {fileID: 6934059565337594413, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_Name
+      value: Shrimp_1_Peeled_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9659259
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.25881907
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bf7bb7d509487d94fa063bee9ac5bc95, type: 3}
+--- !u!4 &363739355383722604 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7742086620746649751, guid: bf7bb7d509487d94fa063bee9ac5bc95,
+    type: 3}
+  m_PrefabInstance: {fileID: 7961565651432203003}
+  m_PrefabAsset: {fileID: 0}

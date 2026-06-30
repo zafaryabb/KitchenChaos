@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddeecabdcc5eb488bbe692066430ff9a, type: 3}
+  m_Name: Tuna_Fillet__to__Tuna_Sashimi
+  m_EditorClassIdentifier: Assembly-CSharp::CuttingRecipeSO
+  from: {fileID: 11400000, guid: 5a115310dcfb9614c9c7ba28be871c41, type: 2}
+  to: {fileID: 11400000, guid: 148a6a808f16f9a478800d05f513d9d3, type: 2}
+  cutCount: 4
+  byproduct: {fileID: 0}
+  verb: 2

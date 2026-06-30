@@ -12,5 +12,6 @@ public class StaticDataReset : MonoBehaviour
         HolderCounter.ResetStaticData();
         PlateKitchenObject.ResetStaticData();
         TrashCounter.ResetStaticData();
+        CatStationCounter.ResetStaticData();
     }
 }

@@ -1,0 +1,122 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8281222956827251174
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7687805764703555371}
+  - component: {fileID: 8007549464156560236}
+  m_Layer: 0
+  m_Name: Squid_Tube
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7687805764703555371
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8281222956827251174}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 888188257904968798}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8007549464156560236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8281222956827251174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43695e53e93c14a96b72979b23cd6435, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KitchenObject
+  kitchenObjectSO: {fileID: 11400000, guid: cf888534d0b1d1b43ac791c1d4b170fd, type: 2}
+--- !u!1001 &3051770915229745928
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7687805764703555371}
+    m_Modifications:
+    - target: {fileID: 2740840568580605782, guid: cdfefafc17bcf5d44a695dd1401b7fff,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2740840568580605782, guid: cdfefafc17bcf5d44a695dd1401b7fff,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2740840568580605782, guid: cdfefafc17bcf5d44a695dd1401b7fff,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2740840568580605782, guid: cdfefafc17bcf5d44a695dd1401b7fff,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2740840568580605782, guid: cdfefafc17bcf5d44a695dd1401b7fff,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2740840568580605782, guid: cdfefafc17bcf5d44a695dd1401b7fff,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2740840568580605782, guid: cdfefafc17bcf5d44a695dd1401b7fff,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2740840568580605782, guid: cdfefafc17bcf5d44a695dd1401b7fff,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2740840568580605782, guid: cdfefafc17bcf5d44a695dd1401b7fff,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2740840568580605782, guid: cdfefafc17bcf5d44a695dd1401b7fff,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3261375054562876908, guid: cdfefafc17bcf5d44a695dd1401b7fff,
+        type: 3}
+      propertyPath: m_Name
+      value: Squid_1_Fillet_1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: cdfefafc17bcf5d44a695dd1401b7fff, type: 3}
+--- !u!4 &888188257904968798 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2740840568580605782, guid: cdfefafc17bcf5d44a695dd1401b7fff,
+    type: 3}
+  m_PrefabInstance: {fileID: 3051770915229745928}
+  m_PrefabAsset: {fileID: 0}
