@@ -54,6 +54,10 @@ serve — and feed the leftover skeletons & shells to a resident cat.
 | `Assets/Scripts/Game/ZenScoreManager.cs` | Additive, never-fail score: plates served, perfect slices, pets fed. Fires `OnScoreChanged` for UI. |
 | `Assets/Scripts/Editor/FishContentGenerator.cs` | **One-click content generator** (menu: `Tide & Table ▸ Generate Fish Content`). See §4. |
 | `Assets/Scripts/Editor/SpriteIconGenerator.cs` | **One-click icon generator** (menu: `Tide & Table ▸ Generate Item Icons`). Renders each item prefab to a transparent sprite and assigns it to `KitchenObjectSO.icon`. See §4.4. |
+| `Assets/Scripts/ScriptableObjects/RecipeDatabaseSO.cs` | Flat list of all cutting/frying recipes + dishes (auto-filled by the generator). Powers the cookbook. |
+| `Assets/Scripts/Cookbook/Cookbook.cs` | Pure logic: traces a dish backwards into ordered **steps** (take → cut → cook → plate). |
+| `Assets/Scripts/Cookbook/OrderProcedureLogger.cs` | Component: logs each incoming order's steps to the Console. Assign the RecipeDatabase. See §4.5. |
+| `Assets/Scripts/Editor/CookbookPrinter.cs` | Menu `Tide & Table ▸ Print Cookbook` — dumps every dish's steps to the Console (no Play needed). |
 
 ### 3.2 Modified scripts
 
@@ -164,6 +168,27 @@ what makes each recipe readable at a glance.
 - Uses **layer 31** for an isolated capture rig — if you actually use layer 31 for
   something, change `IsolationLayer`.
 
+### 4.5 Cookbook / knowing how to make each dish
+
+The generator also writes `_FishGame/_RecipeDatabase.asset` (every cutting + frying
+recipe + dish). From it you can see the exact procedure for any dish:
+
+- **Whole cookbook, instantly:** menu `Tide & Table ▸ Print Cookbook` dumps every
+  dish's steps to the Console — no Play mode. Great for building a real cookbook UI.
+- **Per-order, while playing:** add an `OrderProcedureLogger` to a manager object and
+  assign the RecipeDatabase; each incoming order prints its steps.
+
+Example output for *Grilled Salmon*:
+
+```
+📖 Grilled Salmon
+   1. Take Salmon from the container
+   2. Cut Salmon → Salmon Half at the board (×3)
+   3. Fillet Salmon Half → Salmon Fillet at the board (×3)  (leaves Fish Skeleton for the cat)
+   4. Cook Salmon Fillet → Grilled Salmon on the stove (~6s)
+   5. Plate everything and deliver it at the serving counter
+```
+
 ---
 
 ## 5. 🔧 In-scene wiring guide
@@ -209,6 +234,7 @@ Do these in the `GameScene`. Checkboxes track progress.
 
 ### Step 6 — Managers & polish
 - [ ] Add a `ZenScoreManager` alongside the other managers (GameManager, DeliveryManager, …).
+- [ ] (Optional) Add an `OrderProcedureLogger` and assign `_FishGame/_RecipeDatabase.asset` to log each order's steps. Or just use `Tide & Table ▸ Print Cookbook` (§4.5).
 - [ ] (Later) drop SFX clips into the `SFXSO` asset (`slice`, `slicePerfect`, `peel`, `shuck`, `petEat`, `petPurr`) + an ambient track on `MusicManager`.
 - [ ] Run `Tide & Table ▸ Generate Item Icons` to auto-fill `KitchenObjectSO.icon` so order tickets show art (§4.4).
 - [ ] (Later) swap `PlayerVisual` for an ithappy chef-kid body; keep/assign the humanoid controller.
@@ -226,6 +252,7 @@ Do these in the `GameScene`. Checkboxes track progress.
 - **Order icons:** run `Tide & Table ▸ Generate Item Icons` (§4.4) to auto-fill `KitchenObjectSO.icon` for every item; tickets show blank slots until you do.
 - **Zen timer HUD:** the running timer freezes (doesn't end the game) in `zenMode`; we'll hide/replace it later.
 - **SFX:** all new sound slots are empty and null-guarded — silent until you wire clips.
+- **Re-modelling an item:** change the mesh **inside** the item prefab's visual child — do **not** point a `KitchenObjectSO.prefab` at a raw model FBX, or it loses its `KitchenObject`/`PlateKitchenObject` component and `Spawn` will NRE. (This bit the Plate: its SO pointed at KayKit `plate.prefab`.)
 
 ---
 
@@ -245,6 +272,10 @@ Do these in the `GameScene`. Checkboxes track progress.
 - Wrote the one-click `FishContentGenerator` and seeded **21 items / 13 cutting chains / 8 dishes** (§4).
 - Confirmed DOTween modules + Cinemachine 2.10.7 resolve correctly; removed a build-breaking `using UnityEditor;` from `KitchenObject.cs`.
 - Created this dev doc.
+
+### 2026-06-30 — Cookbook / order procedures
+- Added a **recipe graph** (`RecipeDatabaseSO`, auto-filled by the generator) and `Cookbook` logic that traces any dish backwards into ordered steps (take → cut → cook → plate).
+- `OrderProcedureLogger` logs each incoming order's steps while playing; `Tide & Table ▸ Print Cookbook` dumps every dish's steps in-editor. This is the data a cookbook UI will use next.
 
 ### 2026-06-30 — Full pack + cooking
 - Expanded the generator to use the **whole seafood pack**: salmon, tuna, sea bass, sardine, anchovy, shrimp, lobster ×2, crab, mussel, oyster, scallop, squid, octopus (~60 items, ~30 cut recipes).

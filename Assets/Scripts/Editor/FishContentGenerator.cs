@@ -36,6 +36,7 @@ public static class FishContentGenerator
     private const string PlatedDir = Root + "/PlatedVisuals";
     private const string MatDir = Root + "/Materials";
     private const string MenuAsset = Root + "/_FishMenu.asset";
+    private const string RecipeDbAsset = Root + "/_RecipeDatabase.asset";
     private const string CookedMatPath = MatDir + "/Seafood_Cooked.mat";
 
     private const string SeafoodDir = "Assets/Mnostva_Art/Cartoon_Seafood_Pack/Prefab/Seafood";
@@ -73,14 +74,18 @@ public static class FishContentGenerator
                 items++;
             }
 
+            var allCuts = new List<CuttingRecipeSO>();
             foreach (CutDef def in Cuts)
             {
-                if (CreateOrLoadCut(def, idToSO)) cuts++;
+                CuttingRecipeSO r = CreateOrLoadCut(def, idToSO);
+                if (r != null) { allCuts.Add(r); cuts++; }
             }
 
+            var allFries = new List<FryingRecipeSO>();
             foreach (FryDef def in Fries)
             {
-                if (CreateOrLoadFry(def, idToSO)) fries++;
+                FryingRecipeSO r = CreateOrLoadFry(def, idToSO);
+                if (r != null) { allFries.Add(r); fries++; }
             }
 
             var menuRecipes = new List<MenuRecipeSO>();
@@ -94,6 +99,13 @@ public static class FishContentGenerator
             MenuSO menu = LoadOrCreate<MenuSO>(MenuAsset);
             menu.menuRecipes = menuRecipes;
             EditorUtility.SetDirty(menu);
+
+            // recipe graph for the cookbook / order procedure logger
+            RecipeDatabaseSO db = LoadOrCreate<RecipeDatabaseSO>(RecipeDbAsset);
+            db.cuttingRecipes = allCuts;
+            db.fryingRecipes = allFries;
+            db.dishes = menuRecipes;
+            EditorUtility.SetDirty(db);
         }
         finally
         {
@@ -106,7 +118,9 @@ public static class FishContentGenerator
                   $"{fries} frying recipes, {menus} dishes. Missing source meshes: {missing}.\n" +
                   $"• Assign <b>{MenuAsset}</b> to DeliveryManager + MenuManager.\n" +
                   $"• Drag <b>{CutDir}</b> onto each cutting station's 'Cutting Recipes'.\n" +
-                  $"• Drag <b>{FryDir}</b> onto each stove's 'Frying Recipes'.");
+                  $"• Drag <b>{FryDir}</b> onto each stove's 'Frying Recipes'.\n" +
+                  $"• Run <b>Tide & Table ▸ Print Cookbook</b> to see every dish's steps, or assign " +
+                  $"<b>{RecipeDbAsset}</b> to an OrderProcedureLogger for per-order logging.");
     }
 
     #region Material
@@ -204,13 +218,13 @@ public static class FishContentGenerator
 
     #region Cutting & frying recipe generation
 
-    private static bool CreateOrLoadCut(CutDef def, Dictionary<string, KitchenObjectSO> dict)
+    private static CuttingRecipeSO CreateOrLoadCut(CutDef def, Dictionary<string, KitchenObjectSO> dict)
     {
         if (!dict.TryGetValue(def.from, out KitchenObjectSO from) ||
             !dict.TryGetValue(def.to, out KitchenObjectSO to))
         {
             Debug.LogWarning($"[Tide & Table] Cut recipe references unknown item: {def.from} -> {def.to}");
-            return false;
+            return null;
         }
 
         string path = $"{CutDir}/{def.from}__to__{def.to}.asset";
@@ -221,16 +235,16 @@ public static class FishContentGenerator
         recipe.verb = def.verb;
         recipe.byproduct = (def.byproduct != null && dict.TryGetValue(def.byproduct, out KitchenObjectSO bp)) ? bp : null;
         EditorUtility.SetDirty(recipe);
-        return true;
+        return recipe;
     }
 
-    private static bool CreateOrLoadFry(FryDef def, Dictionary<string, KitchenObjectSO> dict)
+    private static FryingRecipeSO CreateOrLoadFry(FryDef def, Dictionary<string, KitchenObjectSO> dict)
     {
         if (!dict.TryGetValue(def.from, out KitchenObjectSO from) ||
             !dict.TryGetValue(def.to, out KitchenObjectSO to))
         {
             Debug.LogWarning($"[Tide & Table] Fry recipe references unknown item: {def.from} -> {def.to}");
-            return false;
+            return null;
         }
 
         string path = $"{FryDir}/{def.from}__fry__{def.to}.asset";
@@ -240,7 +254,7 @@ public static class FishContentGenerator
         recipe.fryingTime = def.time;
         recipe.shouldWarning = false; // calm cooking: no burn alarms
         EditorUtility.SetDirty(recipe);
-        return true;
+        return recipe;
     }
 
     #endregion

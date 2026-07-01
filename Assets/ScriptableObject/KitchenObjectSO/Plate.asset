@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7d6ec7527f146b6ab6b41621979196, type: 3}
   m_Name: Plate
   m_EditorClassIdentifier: 
-  prefab: {fileID: 2510671998723367201, guid: 9e198bbcb3914492f98fafadd96c24cf, type: 3}
+  prefab: {fileID: 919132149155446097, guid: d6f8a5959db05344ca050bcc85e069c7, type: 3}
   icon: {fileID: 21300000, guid: 3928afb5321bb3d489bbd4ac581b29a2, type: 3}
   objectName: Plate
+  petFood: 0
