@@ -273,6 +273,18 @@ Do these in the `GameScene`. Checkboxes track progress.
 - Confirmed DOTween modules + Cinemachine 2.10.7 resolve correctly; removed a build-breaking `using UnityEditor;` from `KitchenObject.cs`.
 - Created this dev doc.
 
+### 2026-07-04 — Restaurant builder v3 (root cause: "_decorated" pieces)
+- **Root cause of the clutter found:** KayKit `wall_decorated` / `wall_orderwindow_decorated` / decorated tables are **single meshes with furniture baked in** (wall + stove + cabinet + hood + food). Lining walls with them duplicated a furnished unit per segment and buried the containers.
+- v3: **plain `wall` pieces everywhere** (only functional variants: order window, curtain windows, doorway+door), plain fridge/tables (dressed by hand with bowls/plates), room enlarged to **28×20**, containers at z/x=±13 walls with 3-unit gaps, island at (±1.5, 3.5), divider bar `-10..+10` with 4-unit walk gaps at both ends. Rule added to builder header: never use `_decorated` for plain surfaces.
+
+### 2026-07-03 — Restaurant builder v2 (cozy & walkable)
+- v1 was cluttered: it reused the scene's old counters, which carried hand-placed decor children (stove/hood/cabinet units repeated at every slot), and packed too much wall dressing into 22×16.
+- v2: **all pre-existing counters are parked** (disabled, under `== OLD COUNTERS (parked, disabled) ==` — delete when happy) and the 13 containers + 4 stations are **instantiated fresh from the `_New` prefabs**. Room grew to **24×18**; containers spread over **three walls at 3-unit spacing** (fish north, shellfish west, mollusks east); **cook island** (Cutting + Stove) in the open centre; divider = Trash | bar | Delivery | bar | Plates with walk gaps both ends; dressing reduced to single varied anchors (fridge NW, sink+dishrack NE, few bar props, dining set, one crate corner). Re-runs reuse builder-owned counters — no duplicates.
+
+### 2026-07-02 — Restaurant scene builder
+- Added `RestaurantSceneBuilder` (`Tide & Table ▸ Build Restaurant`, plus `Clear Restaurant Build`). One click builds the whole restaurant in the **Restaurant** scene from KayKit prefabs: checker kitchen + styleB dining floors, decorated perimeter walls (order window, curtained windows, doorway + door), north wall of **10 fish containers** + fridge + cabinets, west wall of **3 shellfish containers**, east wall sink (decor) → **Stove** + extractor hood → **Plates counter**, central prep island (table | **Cutting counter** | table), a **sushi-bar divider** with the **Delivery counter** in the middle, stools, dining tables, jars/plates/crates dressing.
+- It **sweeps loose KayKit env pieces** (old hand-placed floors/walls/props) but never touches game counters/player/cameras/UI; **reuses existing counters** (renames + assigns the 13 container SOs via SerializedObject), instantiates missing ones, **parks duplicates** disabled at x=40, and adds **invisible perimeter/divider colliders** (empty GameObjects only — no components added to prefabs). Idempotent; measured-bounds placement; full Undo group.
+
 ### 2026-06-30 — Cookbook / order procedures
 - Added a **recipe graph** (`RecipeDatabaseSO`, auto-filled by the generator) and `Cookbook` logic that traces any dish backwards into ordered steps (take → cut → cook → plate).
 - `OrderProcedureLogger` logs each incoming order's steps while playing; `Tide & Table ▸ Print Cookbook` dumps every dish's steps in-editor. This is the data a cookbook UI will use next.
